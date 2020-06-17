@@ -5,8 +5,7 @@ defmodule Hello.Accounts do
 
   import Ecto.Query, warn: false
   alias Hello.Repo
-
-  alias Hello.Accounts.User
+  alias Hello.Accounts.{User, Credential}
 
   @doc """
   Returns the list of users.
@@ -18,7 +17,9 @@ defmodule Hello.Accounts do
 
   """
   def list_users do
-    Repo.all(User)
+    User
+    |> Repo.all
+    |> Repo.preload(:credential)
   end
 
   @doc """
@@ -35,7 +36,11 @@ defmodule Hello.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    User
+    |> Repo.get!(id)
+    |> Repo.preload(:credential)
+  end
 
   @doc """
   Creates a user.
@@ -52,6 +57,7 @@ defmodule Hello.Accounts do
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
     |> Repo.insert()
   end
 
@@ -70,6 +76,7 @@ defmodule Hello.Accounts do
   def update_user(%User{} = user, attrs) do
     user
     |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
     |> Repo.update()
   end
 
@@ -101,8 +108,6 @@ defmodule Hello.Accounts do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
-
-  alias Hello.Accounts.Credential
 
   @doc """
   Returns the list of credentials.
