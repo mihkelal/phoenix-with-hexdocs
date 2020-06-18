@@ -26,7 +26,6 @@
     </header>
     <main role="main" class="container">
       <p>Locale: <%= @locale %></p>
-      <%= link "Welcome Page!", to: Routes.page_path(@conn, :index) %>
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= @inner_content %>

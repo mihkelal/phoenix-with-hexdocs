@@ -17,7 +17,7 @@ defmodule HelloWeb.Router do
   scope "/", HelloWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    # get "/", PageController, :index
     get "/hello", HelloController, :index
     get "/hello/:messenger", HelloController, :show
 
@@ -28,6 +28,12 @@ defmodule HelloWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api", HelloWeb do
     pipe_through :api
+  end
+
+  scope "/cms", HelloWeb.CMS, as: :cms do
+    pipe_through [:browser, :authenticate_user]
+
+    resources "/pages", PageController
   end
 
   # Enables LiveDashboard only for development
