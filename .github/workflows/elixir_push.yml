@@ -33,6 +33,7 @@ jobs:
       #   run: mix deps.get
       # - name: Run Tests
       #   run: mix test
+      - uses: nelonoel/branch-name@v1
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.0.9
         with:
@@ -40,5 +41,4 @@ jobs:
           username: elixir
           key: ${{ secrets.GH_SECRET }}
           script: |
-            false &&
-            echo 22
+            echo ${BRANCH_NAME}
