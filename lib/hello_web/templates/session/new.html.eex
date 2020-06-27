@@ -14,7 +14,7 @@
   </div>
 <% end %>
 
-<%= form_for @conn, Routes.session_path(@conn, :delete), [method: :delete, as: :user], fn f -> %>
+<%= form_for @conn, Routes.session_path(@conn, :delete), [method: :delete, as: :user], fn _f -> %>
   <div class="form-group">
     <%= submit "Logout" %>
   </div>

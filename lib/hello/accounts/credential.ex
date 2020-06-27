@@ -1,7 +1,7 @@
 defmodule Hello.Accounts.Credential do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Hello.Accounts.Credential
+  alias Hello.Accounts.User
 
   schema "credentials" do
     field :email, :string
