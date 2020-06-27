@@ -1,0 +1,54 @@
+name: Deploy to GC
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: ['**']
+
+jobs:
+  deploy_to_gc:
+    runs-on: ubuntu-latest
+
+    # services:
+    #   db:
+    #     image: postgres:11
+    #     ports: ["5432:5432"]
+    #     env:
+    #       POSTGRES_PASSWORD: postgres
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
+
+    steps:
+      # - uses: actions/checkout@v2
+      # - name: Setup elixir
+      #   uses: actions/setup-elixir@v1
+      #   with:
+      #     elixir-version: "1.10.3" # Define the elixir version [required]
+      #     otp-version: "23" # Define the OTP version [required]
+      # - name: Install Dependencies
+      #   run: mix deps.get
+      # - name: Run Tests
+      #   run: mix test
+      - name: Deploy to GC
+        uses: appleboy/ssh-action@v0.0.9
+        with:
+          host: mihkli.ga
+          username: elixir
+          key: ${{ secrets.GH_SECRET }}
+          script: |
+            cd /var/www/phoenix-with-hexdocs &&
+            git pull origin configure-github-push &&
+            mix deps.get --only prod &&
+            MIX_ENV=prod mix compile &&
+            cd assets &&
+            yarn run deploy &&
+            cd .. &&
+            mix phx.digest &&
+            MIX_ENV=prod mix ecto.migrate &&
+            MIX_ENV=prod mix release --overwrite &&
+            _build/prod/rel/hello/bin/hello stop ||
+            _build/prod/rel/hello/bin/hello daemon
