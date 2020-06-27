@@ -40,5 +40,5 @@ jobs:
           username: elixir
           key: ${{ secrets.GH_SECRET }}
           script: |
-            false
+            false &&
             echo 22
