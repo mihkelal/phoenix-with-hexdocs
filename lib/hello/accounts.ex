@@ -18,7 +18,7 @@ defmodule Hello.Accounts do
   """
   def list_users do
     User
-    |> Repo.all
+    |> Repo.all()
     |> Repo.preload(:credential)
   end
 
@@ -49,9 +49,10 @@ defmodule Hello.Accounts do
 
   """
   def authenticate_by_email_password(email, _password) do
-    query = from u in User,
-      inner_join: c in assoc(u, :credential),
-      where: c.email == ^email
+    query =
+      from u in User,
+        inner_join: c in assoc(u, :credential),
+        where: c.email == ^email
 
     case Repo.one(query) do
       %User{} = user -> {:ok, user}

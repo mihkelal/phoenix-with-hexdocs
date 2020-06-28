@@ -30,9 +30,11 @@ defmodule HelloWeb.CMS.PageController do
   end
 
   def show(conn, %{"id" => id}) do
-    page = id
-    |> CMS.get_page!()
-    |> CMS.inc_page_views()
+    page =
+      id
+      |> CMS.get_page!()
+      |> CMS.inc_page_views()
+
     render(conn, "show.html", page: page)
   end
 
@@ -41,19 +43,20 @@ defmodule HelloWeb.CMS.PageController do
     render(conn, "edit.html", changeset: changeset)
   end
 
-   def update(conn, %{"page" => page_params}) do
-     case CMS.update_page(conn.assigns.page, page_params) do
-        {:ok, page} ->
-          conn
-          |> put_flash(:info, "Page updated successfully.")
-          |> redirect(to: Routes.cms_page_path(conn, :show, page))
-        {:error, %Ecto.Changeset{} = changeset} ->
-         render(conn, "edit.html", changeset: changeset)
-      end
-    end
+  def update(conn, %{"page" => page_params}) do
+    case CMS.update_page(conn.assigns.page, page_params) do
+      {:ok, page} ->
+        conn
+        |> put_flash(:info, "Page updated successfully.")
+        |> redirect(to: Routes.cms_page_path(conn, :show, page))
 
-     def delete(conn, _) do
-       {:ok, _page} = CMS.delete_page(conn.assigns.page)
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "edit.html", changeset: changeset)
+    end
+  end
+
+  def delete(conn, _) do
+    {:ok, _page} = CMS.delete_page(conn.assigns.page)
 
     conn
     |> put_flash(:info, "Page deleted successfully.")
