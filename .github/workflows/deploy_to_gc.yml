@@ -41,7 +41,7 @@ jobs:
           key: ${{ secrets.GH_SECRET }}
           script: |
             cd /var/www/phoenix-with-hexdocs &&
-            git pull origin configure-github-push &&
+            git pull origin ${{ github.head_ref }} &&
             mix deps.get --only prod &&
             MIX_ENV=prod mix compile &&
             cd assets &&
