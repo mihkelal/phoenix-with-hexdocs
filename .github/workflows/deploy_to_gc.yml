@@ -45,8 +45,7 @@ jobs:
           key: ${{ secrets.GH_SECRET }}
           script: |
             cd /var/www/phoenix-with-hexdocs
-            git fetch
-            git reset --hard origin/${{ steps.extract_branch.outputs.branch }}
+            git pull origin master
             mix deps.get --only prod
             MIX_ENV=prod mix compile
             cd assets
