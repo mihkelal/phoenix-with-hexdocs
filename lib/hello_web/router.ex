@@ -17,6 +17,7 @@ defmodule HelloWeb.Router do
   scope "/", HelloWeb do
     pipe_through :browser
 
+    get "/", RootController, :index
     resources "/sessions", SessionController, only: [:new, :create, :delete], singleton: true
     resources "/users", UserController
   end
@@ -53,7 +54,7 @@ defmodule HelloWeb.Router do
       nil ->
         conn
         |> Phoenix.Controller.put_flash(:error, "Login required")
-        |> Phoenix.Controller.redirect(to: "/")
+        |> Phoenix.Controller.redirect(to: HelloWeb.Router.Helpers.session_path(conn, :new))
         |> halt()
 
       user_id ->
