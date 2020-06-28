@@ -33,6 +33,10 @@ jobs:
       #   run: mix deps.get
       # - name: Run Tests
       #   run: mix test
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: Deploy to GC
         uses: appleboy/ssh-action@v0.0.9
         with:
@@ -41,7 +45,7 @@ jobs:
           key: ${{ secrets.GH_SECRET }}
           script: |
             cd /var/www/phoenix-with-hexdocs &&
-            git pull origin ${{ github.head_ref }} &&
+            git pull origin ${{ steps.extract_branch.outputs.branch }} &&
             mix deps.get --only prod &&
             MIX_ENV=prod mix compile &&
             cd assets &&
