@@ -1,5 +1,7 @@
 # Hello
 
+Following along from the [Phoenix guide at hexdocs](https://hexdocs.pm/phoenix/overview.html).
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
